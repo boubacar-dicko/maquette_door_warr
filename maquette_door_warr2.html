@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Door Warr — Maquette Complète v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sun: #F97316;
+  --sun-deep: #EA580C;
+  --sun-glow: #FB923C;
+  --amber: #F59E0B;
+  --amber-light: #FEF3C7;
+  --dawn: #FFF7ED;
+  --dusk: #431407;
+  --night: #1C0A00;
+  --bark: #7C2D12;
+  --clay: #9A3412;
+  --sand: #FDE8D0;
+  --sand2: #FEF0E3;
+  --pebble: #E8C9A8;
+  --stone: #A16207;
+  --text: #292524;
+  --text2: #57534E;
+  --text3: #A8A29E;
+  --white: #FFFAF6;
+  --green: #16A34A;
+  --green-lt: #DCFCE7;
+  --blue: #0284C7;
+  --blue-lt: #E0F2FE;
+  --red: #DC2626;
+  --red-lt: #FEE2E2;
+  --shadow-sun: 0 4px 24px rgba(249,115,22,0.2);
+  --shadow-deep: 0 12px 48px rgba(249,115,22,0.3);
+  --shadow-card: 0 2px 16px rgba(28,10,0,0.08);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--night);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(249,115,22,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 90% 80%, rgba(245,158,11,0.12) 0%, transparent 50%);
+  min-height: 100vh;
+  color: var(--text);
+}
+
+/* === NAVIGATION === */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  background: rgba(28,10,0,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(249,115,22,0.15);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  height: 64px;
+  gap: 32px;
+}
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  font-size: 18px;
+  color: var(--sun);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+.nav-brand-icon {
+  width: 34px; height: 34px;
+  background: var(--sun);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 0 20px rgba(249,115,22,0.5);
+}
+.screen-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex: 1;
+}
+.screen-tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 7px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-btn:hover { color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.05); }
+.tab-btn.active { background: var(--sun); color: white; box-shadow: 0 2px 12px rgba(249,115,22,0.4); }
+.nav-badge {
+  font-size: 11px;
+  background: rgba(249,115,22,0.15);
+  color: var(--sun-glow);
+  border: 1px solid rgba(249,115,22,0.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  flex-shrink: 0;
+}
+
+/* === MAIN === */
+.stage {
+  padding: 80px 0 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* === SECTION HEADER === */
+.sec-wrap {
+  padding: 80px 40px;
+  border-bottom: 1px solid rgba(249,115,22,0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sec-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--sun-glow);
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 900;
+  color: white;
+  text-align: center;
+  margin-bottom: 48px;
+  line-height: 1.1;
+}
+.sec-title span { color: var(--sun); }
+
+/* === PHONES ROW === */
+.phones-row {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.phone-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  transform: translateY(40px);
+  animation: riseIn 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.phone-group:nth-child(1) { animation-delay: 0.05s; }
+.phone-group:nth-child(2) { animation-delay: 0.15s; }
+.phone-group:nth-child(3) { animation-delay: 0.25s; }
+.phone-group:nth-child(4) { animation-delay: 0.35s; }
+.phone-group:nth-child(5) { animation-delay: 0.45s; }
+@keyframes riseIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.screen-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* === PHONE FRAME === */
+.phone {
+  width: 270px;
+  min-height: 560px;
+  background: var(--white);
+  border-radius: 44px;
+  padding: 14px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 0 0 9px rgba(28,10,0,0.95),
+    0 0 0 11px rgba(249,115,22,0.15),
+    0 30px 80px rgba(0,0,0,0.6),
+    0 0 60px rgba(249,115,22,0.1);
+  position: relative;
+  flex-shrink: 0;
+}
+.phone-inner {
+  width: 100%;
+  height: 100%;
+  min-height: 532px;
+  border-radius: 32px;
+  overflow: hidden;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.phone-notch {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 90px; height: 26px;
+  background: var(--night);
+  border-radius: 0 0 18px 18px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.notch-cam { width: 10px; height: 10px; border-radius: 50%; background: #1a1a1a; border: 1px solid #333; }
+.notch-sensor { width: 6px; height: 6px; border-radius: 50%; background: #0a0a0a; }
+
+/* === STATUS BAR === */
+.status-bar {
+  height: 36px;
+  padding: 0 16px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 4px;
+  flex-shrink: 0;
+}
+.status-time { font-size: 11px; font-weight: 700; color: inherit; }
+.status-icons { font-size: 11px; }
+
+/* === BOTTOM NAV === */
+.bot-nav {
+  display: flex;
+  padding: 8px 4px 10px;
+  background: var(--white);
+  border-top: 1px solid rgba(0,0,0,0.05);
+  flex-shrink: 0;
+}
+.bn-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 2px 0;
+  position: relative;
+}
+.bn-icon { font-size: 20px; line-height: 1; }
+.bn-lbl { font-size: 9px; font-weight: 600; color: var(--text3); }
+.bn-item.act .bn-lbl { color: var(--sun); font-weight: 700; }
+.bn-pill {
+  position: absolute;
+  top: -2px;
+  width: 28px; height: 3px;
+  background: var(--sun);
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 8px rgba(249,115,22,0.5);
+}
+
+/* === SCROLLABLE CONTENT === */
+.scr {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.scr::-webkit-scrollbar { display: none; }
+
+/* ========================
+   SCREEN 1 — SPLASH
+========================= */
+.splash {
+  flex: 1;
+  background: var(--night);
+  background-image:
+    radial-gradient(ellipse 120% 60% at 50% 0%, rgba(249,115,22,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 80% at -20% 100%, rgba(245,158,11,0.2) 0%, transparent 50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 24px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.splash-geo {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.splash-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(249,115,22,0.12);
+}
+.splash-logo {
+  width: 88px; height: 88px;
+  background: var(--sun);
+  border-radius: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44px;
+  position: relative; z-index: 1;
+  box-shadow: 0 0 0 12px rgba(249,115,22,0.15), 0 16px 48px rgba(249,115,22,0.4);
+  margin-bottom: 28px;
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 12px rgba(249,115,22,0.15), 0 16px 48px rgba(249,115,22,0.4); }
+  50% { box-shadow: 0 0 0 20px rgba(249,115,22,0.08), 0 16px 48px rgba(249,115,22,0.5); }
+}
+.splash-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: white;
+  text-align: center;
+  line-height: 1.1;
+  position: relative; z-index: 1;
+}
+.splash-title em { color: var(--amber); font-style: normal; }
+.splash-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.6;
+  position: relative; z-index: 1;
+}
+.splash-divider {
+  width: 40px; height: 2px;
+  background: var(--sun);
+  border-radius: 2px;
+  margin: 20px auto;
+  position: relative; z-index: 1;
+  opacity: 0.5;
+}
+.splash-btns {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 32px;
+  position: relative; z-index: 1;
+}
+.btn-sun {
+  width: 100%;
+  padding: 14px;
+  background: var(--sun);
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(249,115,22,0.45);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: transform 0.15s;
+}
+.btn-sun:hover { transform: translateY(-1px); }
+.btn-ghost {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  color: rgba(255,255,255,0.75);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.splash-footer {
+  margin-top: 20px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  text-align: center;
+  position: relative; z-index: 1;
+}
+
+/* ========================
+   SCREEN 2 — ACCUEIL
+========================= */
+.home-hero {
+  background: var(--night);
+  background-image: radial-gradient(ellipse 150% 80% at 80% 0%, rgba(249,115,22,0.3) 0%, transparent 60%);
+  padding: 32px 16px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.home-hero::before {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 100px; height: 100px;
+  background: var(--sun);
+  border-radius: 50%;
+  opacity: 0.06;
+}
+.hero-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.hero-greet {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 4px;
+}
+.hero-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.1;
+}
+.hero-name span { color: var(--amber); }
+.hero-loc {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 4px;
+  display: flex; align-items: center; gap: 4px;
+}
+.hero-actions { display: flex; gap: 8px; align-items: center; }
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  cursor: pointer;
+  position: relative;
+}
+.notif-pip {
+  width: 8px; height: 8px;
+  background: var(--sun);
+  border-radius: 50%;
+  position: absolute;
+  top: 5px; right: 5px;
+  border: 1.5px solid var(--night);
+}
+.hero-av {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sun), var(--amber));
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 14px;
+  border: 2px solid rgba(255,255,255,0.2);
+}
+.searchbox {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(8px);
+}
+.srch-icon { font-size: 14px; opacity: 0.5; }
+.srch-placeholder { font-size: 12px; color: rgba(255,255,255,0.35); flex: 1; }
+.srch-filter {
+  width: 30px; height: 30px;
+  background: var(--sun);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+}
+
+.home-body { padding: 14px 14px 0; }
+
+.row-hd {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
+.row-title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.row-more { font-size: 11px; color: var(--sun); font-weight: 600; }
+
+/* Categories */
+.cats {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin-bottom: 18px;
+  padding-bottom: 2px;
+}
+.cats::-webkit-scrollbar { display: none; }
+.cat {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 11px;
+  border-radius: 14px;
+  border: 1.5px solid var(--pebble);
+  background: var(--white);
+  cursor: pointer;
+  min-width: 58px;
+  transition: all 0.15s;
+}
+.cat.on {
+  background: var(--sun);
+  border-color: var(--sun);
+  box-shadow: 0 6px 16px rgba(249,115,22,0.35);
+}
+.cat-ico { font-size: 22px; line-height: 1; }
+.cat-lbl { font-size: 9px; font-weight: 700; color: var(--text2); white-space: nowrap; }
+.cat.on .cat-lbl { color: white; }
+
+/* Worker cards */
+.wcard {
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 18px;
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.wcard:hover { transform: translateY(-2px); box-shadow: var(--shadow-sun); }
+.wav {
+  width: 50px; height: 50px;
+  border-radius: 15px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  position: relative;
+}
+.wav-online {
+  position: absolute; bottom: 2px; right: 2px;
+  width: 11px; height: 11px;
+  background: var(--green);
+  border-radius: 50%;
+  border: 2px solid white;
+}
+.winfo { flex: 1; min-width: 0; }
+.wname { font-size: 13px; font-weight: 700; color: var(--text); }
+.wmeta { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.wfoot { display: flex; align-items: center; gap: 5px; margin-top: 5px; }
+.chip {
+  font-size: 9px; font-weight: 700;
+  padding: 2px 7px; border-radius: 20px;
+}
+.chip-grn { background: var(--green-lt); color: var(--green); }
+.chip-sun { background: var(--sand); color: var(--sun-deep); }
+.chip-blu { background: var(--blue-lt); color: var(--blue); }
+.stars { font-size: 10px; color: var(--amber); }
+.wside { text-align: right; flex-shrink: 0; }
+.wprice { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--sun); }
+.wdist { font-size: 10px; color: var(--text3); margin-top: 3px; }
+
+/* ========================
+   SCREEN 3 — MAP
+========================= */
+.map-wrap { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.map-canvas {
+  flex: 1;
+  background-color: #E8DDD0;
+  position: relative;
+  overflow: hidden;
+  background-image:
+    linear-gradient(rgba(232,221,208,0.6), rgba(232,221,208,0.6)),
+    repeating-linear-gradient(0deg, transparent, transparent 32px, rgba(249,115,22,0.04) 32px, rgba(249,115,22,0.04) 33px),
+    repeating-linear-gradient(90deg, transparent, transparent 32px, rgba(249,115,22,0.04) 32px, rgba(249,115,22,0.04) 33px);
+}
+.road-h { position: absolute; height: 12px; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 2px; }
+.road-v { position: absolute; width: 12px; background: white; box-shadow: 1px 0 3px rgba(0,0,0,0.1); border-radius: 2px; }
+.blk { position: absolute; background: rgba(200,185,165,0.55); border-radius: 8px; }
+.blk-lbl { position: absolute; font-size: 7px; color: rgba(100,70,40,0.4); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.map-pin {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center;
+  transform: translate(-50%, -100%);
+  z-index: 10; cursor: pointer;
+}
+.pin-card {
+  background: white;
+  border-radius: 12px;
+  padding: 6px 9px;
+  display: flex; align-items: center; gap: 5px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  border: 1.5px solid rgba(0,0,0,0.06);
+  white-space: nowrap;
+  transition: transform 0.2s;
+}
+.pin-card.sel { background: var(--sun); border-color: var(--sun); box-shadow: 0 4px 20px rgba(249,115,22,0.45); }
+.pin-card:hover { transform: scale(1.05); }
+.pin-em { font-size: 14px; }
+.pin-nm { font-size: 10px; font-weight: 700; color: var(--text); }
+.pin-card.sel .pin-nm, .pin-card.sel .pin-pr { color: white; }
+.pin-pr { font-size: 9px; color: var(--text2); }
+.pin-tri { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid white; margin-top: -1px; }
+.pin-tri.sel { border-top-color: var(--sun); }
+.pin-dot { width: 8px; height: 8px; border-radius: 50%; border: 2px solid white; margin-top: -2px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.me-dot {
+  position: absolute;
+  width: 20px; height: 20px;
+  background: var(--blue);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 12px rgba(2,132,199,0.5);
+  z-index: 8;
+  transform: translate(-50%,-50%);
+}
+.me-ripple {
+  position: absolute;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: rgba(2,132,199,0.12);
+  z-index: 7;
+  transform: translate(-50%,-50%);
+  animation: ripple 2s ease-out infinite;
+}
+@keyframes ripple { 0%{transform:translate(-50%,-50%) scale(0.5);opacity:1} 100%{transform:translate(-50%,-50%) scale(1.5);opacity:0} }
+.map-topbar {
+  position: absolute; top: 12px; left: 12px; right: 12px; z-index: 20;
+}
+.map-sb {
+  background: white;
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+}
+.map-sb-txt { font-size: 12px; color: var(--text3); flex: 1; }
+.map-filter-tags {
+  display: flex; gap: 5px; margin-top: 8px;
+}
+.ftag {
+  padding: 5px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 700;
+  background: white; border: 1.5px solid var(--pebble);
+  color: var(--text2); box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  white-space: nowrap; cursor: pointer;
+}
+.ftag.on { background: var(--sun); border-color: var(--sun); color: white; box-shadow: 0 4px 12px rgba(249,115,22,0.35); }
+.map-zoom {
+  position: absolute; bottom: 12px; right: 10px; z-index: 15;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.zoom-btn {
+  width: 30px; height: 30px;
+  background: white; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: var(--text2);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+.map-count {
+  position: absolute; top: 92px; left: 12px;
+  background: var(--sun);
+  color: white; font-size: 10px; font-weight: 700;
+  padding: 5px 10px; border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(249,115,22,0.4);
+  z-index: 15;
+}
+.sel-card {
+  background: white;
+  padding: 12px 14px;
+  border-top: 1.5px solid var(--sand);
+  display: flex; align-items: center; gap: 12px;
+  flex-shrink: 0;
+}
+.sel-av {
+  width: 46px; height: 46px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.sel-info { flex: 1; min-width: 0; }
+.sel-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.sel-meta { font-size: 11px; color: var(--text2); margin-top: 2px; }
+.sel-avail { font-size: 11px; color: var(--green); font-weight: 600; margin-top: 2px; }
+.btn-book {
+  background: var(--sun);
+  color: white; border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(249,115,22,0.4);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ========================
+   SCREEN 4 — PROFIL ARTISAN
+========================= */
+.artisan-hero {
+  background: var(--night);
+  background-image: radial-gradient(ellipse 200% 80% at 100% 0%, rgba(249,115,22,0.3) 0%, transparent 50%);
+  padding: 32px 16px 20px;
+  position: relative; overflow: hidden;
+}
+.artisan-hero-row {
+  display: flex; gap: 14px; align-items: flex-start;
+  position: relative; z-index: 1;
+}
+.artisan-av {
+  width: 68px; height: 68px;
+  border-radius: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  border: 2.5px solid rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  position: relative;
+}
+.v-badge {
+  position: absolute; bottom: -4px; right: -4px;
+  width: 22px; height: 22px;
+  background: var(--amber);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  border: 2px solid var(--night);
+}
+.artisan-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700; color: white;
+  margin-bottom: 3px;
+}
+.artisan-trade { font-size: 12px; color: var(--amber); margin-bottom: 8px; }
+.artisan-chips { display: flex; gap: 5px; }
+.a-stats {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 16px;
+  position: relative; z-index: 1;
+}
+.astat {
+  text-align: center; padding: 12px 6px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+.astat:last-child { border-right: none; }
+.astat-n { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: white; }
+.astat-l { font-size: 9px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.artisan-body {
+  flex: 1; overflow-y: auto; scrollbar-width: none; padding: 14px;
+}
+.artisan-body::-webkit-scrollbar { display: none; }
+.a-sec { margin-bottom: 14px; }
+.a-sec-title {
+  font-size: 12px; font-weight: 700; color: var(--text);
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.skills-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill { padding: 5px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; background: var(--sand); color: var(--sun-deep); border: 1px solid rgba(249,115,22,0.15); }
+.info-cards { display: flex; flex-direction: column; gap: 7px; }
+.icard {
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.icard-ico { font-size: 16px; }
+.icard-txt { font-size: 11px; color: var(--text); font-weight: 500; flex: 1; }
+.icard-tag { margin-left: auto; }
+.reviews { display: flex; flex-direction: column; gap: 8px; }
+.rev {
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 14px;
+  padding: 11px 12px;
+}
+.rev-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.rev-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.rev-nm { font-size: 11px; font-weight: 700; color: var(--text); }
+.rev-date { font-size: 10px; color: var(--text3); margin-left: auto; }
+.rev-stars { color: var(--amber); font-size: 10px; }
+.rev-txt { font-size: 11px; color: var(--text2); line-height: 1.6; }
+.book-footer {
+  padding: 12px 14px;
+  background: var(--white);
+  border-top: 1.5px solid var(--sand);
+  flex-shrink: 0;
+}
+
+/* ========================
+   SCREEN 5 — PROFIL CLIENT
+========================= */
+.client-header {
+  background: var(--night);
+  background-image: radial-gradient(ellipse 200% 100% at 50% -20%, rgba(249,115,22,0.4) 0%, transparent 55%);
+  padding: 32px 16px 20px;
+  position: relative; overflow: hidden;
+}
+.client-cover {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: var(--white);
+  border-radius: 24px 24px 0 0;
+}
+.client-av-wrap {
+  display: flex; justify-content: center; margin-bottom: 12px;
+  position: relative; z-index: 1;
+}
+.client-av {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--sun), var(--amber));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px;
+  border: 4px solid var(--night);
+  box-shadow: 0 8px 32px rgba(249,115,22,0.4), 0 0 0 2px rgba(249,115,22,0.3);
+}
+.client-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700; color: white;
+  text-align: center; margin-bottom: 4px;
+  position: relative; z-index: 1;
+}
+.client-since {
+  font-size: 11px; color: rgba(255,255,255,0.4);
+  text-align: center; margin-bottom: 10px;
+  position: relative; z-index: 1;
+}
+.client-chips { display: flex; justify-content: center; gap: 6px; position: relative; z-index: 1; }
+.client-body {
+  flex: 1; overflow-y: auto; scrollbar-width: none;
+  padding: 8px 14px 14px;
+  background: var(--white);
+}
+.client-body::-webkit-scrollbar { display: none; }
+.c-kpi { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+.c-kpi-card {
+  background: var(--sand2);
+  border: 1.5px solid var(--pebble);
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.c-kpi-n { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--sun); }
+.c-kpi-l { font-size: 9px; color: var(--text2); font-weight: 600; margin-top: 2px; }
+.missions-list { display: flex; flex-direction: column; gap: 8px; }
+.mcard {
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 14px;
+  padding: 11px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.mcard-ico { font-size: 22px; }
+.mcard-info { flex: 1; min-width: 0; }
+.mcard-title { font-size: 12px; font-weight: 700; color: var(--text); }
+.mcard-sub { font-size: 10px; color: var(--text2); margin-top: 2px; }
+.mcard-side { text-align: right; flex-shrink: 0; }
+.mcard-price { font-size: 12px; font-weight: 700; color: var(--text); }
+.mcard-date { font-size: 10px; color: var(--text3); margin-top: 2px; }
+.fav-row {
+  display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px;
+}
+.fav-row::-webkit-scrollbar { display: none; }
+.fav-chip {
+  flex-shrink: 0;
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  min-width: 70px;
+}
+.fav-em { font-size: 22px; }
+.fav-nm { font-size: 10px; font-weight: 700; color: var(--text); text-align: center; }
+.fav-rt { font-size: 9px; color: var(--amber); }
+.pay-methods-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.pay-method {
+  border: 1.5px solid var(--pebble);
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.pay-method.def { border-color: var(--sun); background: var(--sand); }
+.pay-em { font-size: 20px; margin-bottom: 4px; }
+.pay-name { font-size: 10px; font-weight: 700; color: var(--text); }
+.pay-nb { font-size: 9px; color: var(--text3); margin-top: 2px; }
+.pay-def { font-size: 9px; font-weight: 700; color: var(--sun); margin-top: 3px; }
+.settings-list { display: flex; flex-direction: column; gap: 6px; }
+.srow {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 12px;
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.srow-ico { font-size: 16px; }
+.srow-txt { font-size: 12px; font-weight: 600; color: var(--text); flex: 1; }
+.srow-arr { font-size: 12px; color: var(--text3); }
+
+/* ========================
+   SCREEN 6 — SUIVI MISSION
+========================= */
+.mission-head {
+  background: var(--sand2);
+  padding: 32px 16px 14px;
+  border-bottom: 1.5px solid var(--pebble);
+}
+.mission-head-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.mission-ht {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700; color: var(--text);
+}
+.mission-id { font-size: 10px; color: var(--text3); margin-top: 3px; }
+.status-pill {
+  padding: 6px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: 700;
+  background: var(--amber-light); color: var(--stone);
+  display: flex; align-items: center; gap: 5px;
+}
+.track-wrap { padding: 16px; }
+.tline { display: flex; flex-direction: column; }
+.titem { display: flex; gap: 12px; }
+.t-vis { display: flex; flex-direction: column; align-items: center; }
+.tdot {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.tdot.done { background: var(--sun); color: white; box-shadow: 0 4px 12px rgba(249,115,22,0.4); }
+.tdot.now {
+  background: white;
+  border: 2.5px solid var(--sun);
+  color: var(--sun); font-size: 10px;
+  box-shadow: 0 0 0 4px rgba(249,115,22,0.1);
+  animation: throb 1.5s ease-in-out infinite;
+}
+@keyframes throb { 0%,100%{box-shadow:0 0 0 4px rgba(249,115,22,0.1)} 50%{box-shadow:0 0 0 8px rgba(249,115,22,0.06)} }
+.tdot.pend { background: var(--sand); color: var(--text3); border: 1.5px solid var(--pebble); }
+.tconn { width: 2px; height: 28px; margin: 3px 0; border-radius: 2px; }
+.tconn.done { background: var(--sun); }
+.tconn.pend { background: var(--pebble); }
+.tcont { padding-bottom: 22px; }
+.t-title { font-size: 12px; font-weight: 700; color: var(--text); margin-top: 4px; }
+.t-desc { font-size: 10px; color: var(--text2); margin-top: 2px; }
+.t-time { font-size: 10px; color: var(--sun); font-weight: 600; margin-top: 2px; }
+.w-mini { margin: 0 14px; }
+.w-mini-card {
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.action-btns { display: flex; gap: 6px; margin-left: auto; }
+.act-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; cursor: pointer;
+}
+.pay-recap {
+  margin: 10px 14px;
+  background: var(--white);
+  border: 1.5px solid var(--pebble);
+  border-radius: 16px;
+  padding: 14px;
+}
+.pr { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.pr-lbl { font-size: 11px; color: var(--text2); }
+.pr-val { font-size: 11px; font-weight: 600; color: var(--text); }
+.pr-divider { border: none; border-top: 1px solid var(--pebble); margin-bottom: 8px; }
+.pr-total { display: flex; justify-content: space-between; align-items: center; }
+.pr-total-lbl { font-size: 13px; font-weight: 700; color: var(--text); }
+.pr-total-val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--sun); }
+.mobile-pays { display: flex; gap: 6px; margin-top: 12px; }
+.mpay {
+  flex: 1; padding: 9px 6px; border-radius: 11px;
+  border: 1.5px solid var(--pebble);
+  text-align: center; font-size: 11px; font-weight: 700;
+  color: var(--text2); cursor: pointer;
+  transition: all 0.15s;
+}
+.mpay.sel { border-color: var(--sun); background: var(--sand); color: var(--sun-deep); }
+
+/* ========================
+   FOOTER
+========================= */
+.stage-footer {
+  padding: 40px;
+  text-align: center;
+  border-top: 1px solid rgba(249,115,22,0.1);
+}
+.sf-text { font-size: 12px; color: rgba(255,255,255,0.25); }
+.sf-text strong { color: var(--sun); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-brand">
+    <div class="nav-brand-icon">🔨</div>
+    Door Warr
+  </div>
+  <div class="screen-tabs">
+    <button class="tab-btn active" onclick="scrollToSec('s0')">Splash</button>
+    <button class="tab-btn" onclick="scrollToSec('s1')">Accueil</button>
+    <button class="tab-btn" onclick="scrollToSec('s2')">Carte</button>
+    <button class="tab-btn" onclick="scrollToSec('s3')">Profil Artisan</button>
+    <button class="tab-btn" onclick="scrollToSec('s4')">Profil Client</button>
+    <button class="tab-btn" onclick="scrollToSec('s5')">Suivi Mission</button>
+  </div>
+  <div class="nav-badge">🇸🇳 Sénégal · v2.0</div>
+</nav>
+
+<div class="stage">
+
+  <!-- =========================================
+       SECTION 0 — SPLASH + INSCRIPTION
+  ========================================= -->
+  <div class="sec-wrap" id="s0">
+    <div class="sec-eyebrow">Écrans 01 · 02</div>
+    <div class="sec-title">Onboarding & <span>Inscription</span></div>
+    <div class="phones-row">
+
+      <!-- SPLASH -->
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="splash">
+              <div class="splash-geo">
+                <div class="splash-circle" style="width:300px;height:300px;top:-80px;left:-60px;"></div>
+                <div class="splash-circle" style="width:180px;height:180px;top:40px;right:-40px;border-color:rgba(245,158,11,0.1);"></div>
+                <div class="splash-circle" style="width:400px;height:400px;bottom:-180px;left:-80px;border-color:rgba(249,115,22,0.06);"></div>
+              </div>
+              <div class="splash-logo">🔨</div>
+              <div class="splash-title">Door Warr<br>ou <em>Dann Doley</em></div>
+              <div class="splash-sub">Trouvez le bon artisan près de<br>chez vous, en quelques secondes</div>
+              <div class="splash-divider"></div>
+              <div style="display:flex;gap:10px;position:relative;z-index:1;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                  <div style="width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🔧</div>
+                  <div style="font-size:9px;color:rgba(255,255,255,0.35);">Plomberie</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                  <div style="width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</div>
+                  <div style="font-size:9px;color:rgba(255,255,255,0.35);">Électricité</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                  <div style="width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🧱</div>
+                  <div style="font-size:9px;color:rgba(255,255,255,0.35);">Maçonnerie</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                  <div style="width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;">🎨</div>
+                  <div style="font-size:9px;color:rgba(255,255,255,0.35);">Peinture</div>
+                </div>
+              </div>
+              <div class="splash-btns">
+                <button class="btn-sun">👤 Trouver un artisan</button>
+                <button class="btn-ghost">🔨 Je suis artisan</button>
+              </div>
+              <div class="splash-footer">Disponible sur iOS · Android · Web</div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Splash Screen</div>
+      </div>
+
+      <!-- INSCRIPTION -->
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="status-bar" style="background:var(--night);color:rgba(255,255,255,0.6);">
+              <div class="status-time">9:41</div>
+              <div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="scr" style="background:var(--night);">
+              <div style="padding:8px 20px 24px;">
+                <div style="display:inline-block;background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.25);border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--sun-glow);margin-bottom:16px;">NOUVEAU COMPTE</div>
+                <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:white;line-height:1.1;margin-bottom:20px;">Rejoignez<br>Door Warr 🇸🇳</div>
+                <!-- Toggle -->
+                <div style="display:flex;background:rgba(255,255,255,0.06);border-radius:12px;padding:3px;margin-bottom:18px;gap:3px;">
+                  <div style="flex:1;text-align:center;padding:9px;background:var(--sun);border-radius:9px;font-size:12px;font-weight:700;color:white;box-shadow:0 4px 12px rgba(249,115,22,0.4);">Client</div>
+                  <div style="flex:1;text-align:center;padding:9px;font-size:12px;color:rgba(255,255,255,0.4);font-weight:600;">Artisan</div>
+                </div>
+                <!-- Fields -->
+                <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px;">
+                  <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:13px;padding:11px 14px;">
+                    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Prénom & Nom</div>
+                    <div style="font-size:13px;color:white;font-weight:500;">Moussa Diallo</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:13px;padding:11px 14px;">
+                    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Téléphone</div>
+                    <div style="font-size:13px;color:white;font-weight:500;">+221 77 ··· ·· ··</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:13px;padding:11px 14px;">
+                    <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Adresse / Quartier</div>
+                    <div style="font-size:13px;color:white;font-weight:500;">Dakar — Plateau</div>
+                  </div>
+                  <!-- Mobile money -->
+                  <div style="background:rgba(249,115,22,0.1);border:1.5px solid rgba(249,115,22,0.3);border-radius:13px;padding:11px 14px;">
+                    <div style="font-size:9px;font-weight:700;color:var(--sun-glow);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Mode de paiement</div>
+                    <div style="display:flex;gap:6px;">
+                      <div style="flex:1;background:var(--sun);border-radius:9px;padding:7px 5px;text-align:center;font-size:10px;font-weight:700;color:white;box-shadow:0 4px 12px rgba(249,115,22,0.4);">🟠 Orange</div>
+                      <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:9px;padding:7px 5px;text-align:center;font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);">🔵 Wave</div>
+                      <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:9px;padding:7px 5px;text-align:center;font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);">🟢 Free</div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn-sun" style="margin-bottom:12px;">Créer mon compte →</button>
+                <div style="text-align:center;font-size:11px;color:rgba(255,255,255,0.3);">Déjà inscrit ? <span style="color:var(--sun);font-weight:700;">Se connecter</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Inscription</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================
+       SECTION 1 — ACCUEIL
+  ========================================= -->
+  <div class="sec-wrap" id="s1">
+    <div class="sec-eyebrow">Écran 03</div>
+    <div class="sec-title">Accueil Client — <span>Recherche</span></div>
+    <div class="phones-row">
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="status-bar" style="background:var(--night);color:rgba(255,255,255,0.6);">
+              <div class="status-time">10:22</div><div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="scr">
+              <!-- Hero -->
+              <div class="home-hero">
+                <div class="hero-row">
+                  <div>
+                    <div class="hero-greet">Bonjour 👋</div>
+                    <div class="hero-name">Moussa <span>Diallo</span></div>
+                    <div class="hero-loc">📍 Plateau, Dakar</div>
+                  </div>
+                  <div class="hero-actions">
+                    <div class="icon-btn">🔔<div class="notif-pip"></div></div>
+                    <div class="hero-av">M</div>
+                  </div>
+                </div>
+                <div class="searchbox">
+                  <div class="srch-icon">🔍</div>
+                  <div class="srch-placeholder">Quel artisan cherchez-vous ?</div>
+                  <div class="srch-filter">⚙️</div>
+                </div>
+              </div>
+              <!-- Body -->
+              <div class="home-body">
+                <div class="row-hd"><div class="row-title">Catégories</div><div class="row-more">Tout voir</div></div>
+                <div class="cats">
+                  <div class="cat on"><div class="cat-ico">🔧</div><div class="cat-lbl">Plombier</div></div>
+                  <div class="cat"><div class="cat-ico">⚡</div><div class="cat-lbl">Électricien</div></div>
+                  <div class="cat"><div class="cat-ico">🧱</div><div class="cat-lbl">Maçon</div></div>
+                  <div class="cat"><div class="cat-ico">🎨</div><div class="cat-lbl">Peintre</div></div>
+                  <div class="cat"><div class="cat-ico">🪚</div><div class="cat-lbl">Menuisier</div></div>
+                  <div class="cat"><div class="cat-ico">❄️</div><div class="cat-lbl">Climatiseur</div></div>
+                </div>
+
+                <!-- Featured -->
+                <div style="background:linear-gradient(135deg,var(--sun-deep),var(--sun));border-radius:18px;padding:14px;margin-bottom:16px;position:relative;overflow:hidden;">
+                  <div style="position:absolute;right:-10px;top:-10px;font-size:60px;opacity:0.15;">🔨</div>
+                  <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:4px;">OFFRE DU JOUR</div>
+                  <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:white;margin-bottom:8px;">Artisans vérifiés<br>à -20% ce weekend</div>
+                  <div style="display:inline-block;background:white;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--sun-deep);">Profiter →</div>
+                </div>
+
+                <div class="row-hd"><div class="row-title">Près de vous · 8 résultats</div><div class="row-more">Carte →</div></div>
+                <div class="wcard">
+                  <div class="wav" style="background:linear-gradient(135deg,#F97316,#FB923C);">🔧<div class="wav-online"></div></div>
+                  <div class="winfo">
+                    <div class="wname">Ibrahima Ndiaye</div>
+                    <div class="wmeta">Plombier · 5 ans exp.</div>
+                    <div class="wfoot"><div class="stars">⭐⭐⭐⭐⭐</div><span style="font-size:10px;color:var(--text3);">4.9</span><div class="chip chip-grn">Disponible</div></div>
+                  </div>
+                  <div class="wside"><div class="wprice">3 500 F</div><div class="wdist">📍 1.2 km</div></div>
+                </div>
+                <div class="wcard">
+                  <div class="wav" style="background:linear-gradient(135deg,#0EA5E9,#38BDF8);">⚡<div class="wav-online"></div></div>
+                  <div class="winfo">
+                    <div class="wname">Abdou Sarr</div>
+                    <div class="wmeta">Électricien · 8 ans exp.</div>
+                    <div class="wfoot"><div class="stars">⭐⭐⭐⭐</div><span style="font-size:10px;color:var(--text3);">4.7</span><div class="chip chip-sun">En mission</div></div>
+                  </div>
+                  <div class="wside"><div class="wprice">5 000 F</div><div class="wdist">📍 2.8 km</div></div>
+                </div>
+                <div class="wcard">
+                  <div class="wav" style="background:linear-gradient(135deg,#16A34A,#22C55E);">🧱<div class="wav-online"></div></div>
+                  <div class="winfo">
+                    <div class="wname">Mamadou Ba</div>
+                    <div class="wmeta">Maçon · 12 ans exp.</div>
+                    <div class="wfoot"><div class="stars">⭐⭐⭐⭐⭐</div><span style="font-size:10px;color:var(--text3);">5.0</span><div class="chip chip-grn">Disponible</div></div>
+                  </div>
+                  <div class="wside"><div class="wprice">8 000 F</div><div class="wdist">📍 3.5 km</div></div>
+                </div>
+                <div style="height:12px;"></div>
+              </div>
+            </div>
+            <div class="bot-nav">
+              <div class="bn-item act"><div class="bn-pill"></div><div class="bn-icon">🏠</div><div class="bn-lbl">Accueil</div></div>
+              <div class="bn-item"><div class="bn-icon">🗺️</div><div class="bn-lbl">Carte</div></div>
+              <div class="bn-item"><div class="bn-icon">📋</div><div class="bn-lbl">Missions</div></div>
+              <div class="bn-item"><div class="bn-icon">💬</div><div class="bn-lbl">Messages</div></div>
+              <div class="bn-item"><div class="bn-icon">👤</div><div class="bn-lbl">Profil</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Accueil & Recherche</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       SECTION 2 — CARTE
+  ========================================= -->
+  <div class="sec-wrap" id="s2">
+    <div class="sec-eyebrow">Écran 04</div>
+    <div class="sec-title">Carte — <span>Géolocalisation</span></div>
+    <div class="phones-row">
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="status-bar" style="background:#f0e8e0;color:#6b5a4a;">
+              <div class="status-time">10:35</div><div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="map-wrap">
+              <div class="map-canvas">
+                <!-- Roads -->
+                <div class="road-h" style="top:85px;left:0;right:0;"></div>
+                <div class="road-h" style="top:160px;left:0;right:0;"></div>
+                <div class="road-h" style="top:240px;left:0;right:0;"></div>
+                <div class="road-h" style="top:320px;left:0;right:0;"></div>
+                <div class="road-v" style="left:55px;top:0;bottom:0;"></div>
+                <div class="road-v" style="left:135px;top:0;bottom:0;"></div>
+                <div class="road-v" style="left:210px;top:0;bottom:0;"></div>
+                <!-- Blocks -->
+                <div class="blk" style="top:97px;left:14px;width:30px;height:52px;"></div>
+                <div class="blk" style="top:97px;left:68px;width:56px;height:52px;"></div>
+                <div class="blk" style="top:97px;left:148px;width:50px;height:52px;"></div>
+                <div class="blk" style="top:172px;left:14px;width:30px;height:56px;"></div>
+                <div class="blk" style="top:172px;left:68px;width:56px;height:56px;"></div>
+                <div class="blk" style="top:172px;left:148px;width:50px;height:56px;"></div>
+                <div class="blk" style="top:252px;left:68px;width:56px;height:56px;"></div>
+                <div class="blk" style="top:252px;left:148px;width:50px;height:40px;"></div>
+                <!-- Labels -->
+                <div class="blk-lbl" style="top:104px;left:72px;">Avenue Bourguiba</div>
+                <div class="blk-lbl" style="top:186px;left:220px;">Rue 12</div>
+                <!-- Me -->
+                <div class="me-ripple" style="top:210px;left:128px;"></div>
+                <div class="me-dot" style="top:210px;left:128px;"></div>
+                <!-- Pins -->
+                <div class="map-pin" style="top:135px;left:88px;">
+                  <div class="pin-card sel"><div class="pin-em">🔧</div><div><div class="pin-nm">Ibrahima</div><div class="pin-pr">3 500 F</div></div></div>
+                  <div class="pin-tri sel"></div>
+                  <div class="pin-dot" style="background:var(--sun);"></div>
+                </div>
+                <div class="map-pin" style="top:175px;left:220px;">
+                  <div class="pin-card"><div class="pin-em">⚡</div><div><div class="pin-nm">Abdou</div><div class="pin-pr">5 000 F</div></div></div>
+                  <div class="pin-tri"></div>
+                  <div class="pin-dot" style="background:#0EA5E9;"></div>
+                </div>
+                <div class="map-pin" style="top:285px;left:98px;">
+                  <div class="pin-card"><div class="pin-em">🧱</div><div><div class="pin-nm">Mamadou</div><div class="pin-pr">8 000 F</div></div></div>
+                  <div class="pin-tri"></div>
+                  <div class="pin-dot" style="background:#16A34A;"></div>
+                </div>
+                <div class="map-pin" style="top:110px;left:228px;">
+                  <div class="pin-card"><div class="pin-em">🎨</div><div><div class="pin-nm">Fatou</div><div class="pin-pr">4 000 F</div></div></div>
+                  <div class="pin-tri"></div>
+                  <div class="pin-dot" style="background:#9333EA;"></div>
+                </div>
+                <!-- Map overlay -->
+                <div class="map-topbar">
+                  <div class="map-sb">
+                    <span style="font-size:14px;">🔍</span>
+                    <div class="map-sb-txt">Plombiers · Plateau...</div>
+                    <div style="background:var(--sand);border-radius:8px;padding:5px 9px;font-size:10px;font-weight:700;color:var(--sun-deep);">Filtrer</div>
+                  </div>
+                  <div class="map-filter-tags">
+                    <div class="ftag on">🔧 Plombier</div>
+                    <div class="ftag">⚡ Électricien</div>
+                    <div class="ftag">🧱 Maçon</div>
+                  </div>
+                </div>
+                <div class="map-count">🔨 8 artisans</div>
+                <!-- Zoom -->
+                <div class="map-zoom">
+                  <div class="zoom-btn">+</div>
+                  <div class="zoom-btn" style="font-size:20px;line-height:1;">−</div>
+                </div>
+              </div>
+              <!-- Selected card -->
+              <div class="sel-card">
+                <div class="sel-av" style="background:linear-gradient(135deg,#F97316,#FB923C);">🔧</div>
+                <div class="sel-info">
+                  <div class="sel-name">Ibrahima Ndiaye</div>
+                  <div class="sel-meta">Plombier · ⭐ 4.9 · 1.2 km</div>
+                  <div class="sel-avail">● Disponible maintenant</div>
+                </div>
+                <button class="btn-book">Réserver</button>
+              </div>
+              <div class="bot-nav">
+                <div class="bn-item"><div class="bn-icon">🏠</div><div class="bn-lbl">Accueil</div></div>
+                <div class="bn-item act"><div class="bn-pill"></div><div class="bn-icon">🗺️</div><div class="bn-lbl">Carte</div></div>
+                <div class="bn-item"><div class="bn-icon">📋</div><div class="bn-lbl">Missions</div></div>
+                <div class="bn-item"><div class="bn-icon">💬</div><div class="bn-lbl">Messages</div></div>
+                <div class="bn-item"><div class="bn-icon">👤</div><div class="bn-lbl">Profil</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Carte interactive</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       SECTION 3 — PROFIL ARTISAN
+  ========================================= -->
+  <div class="sec-wrap" id="s3">
+    <div class="sec-eyebrow">Écran 05</div>
+    <div class="sec-title">Profil <span>Artisan</span></div>
+    <div class="phones-row">
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="status-bar" style="background:var(--night);color:rgba(255,255,255,0.6);">
+              <div class="status-time">10:47</div><div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="artisan-hero">
+              <div class="artisan-hero-row">
+                <div class="artisan-av" style="background:linear-gradient(135deg,#16A34A,#22C55E);">🧱<div class="v-badge">✓</div></div>
+                <div style="flex:1;">
+                  <div class="artisan-name">Mamadou Ba</div>
+                  <div class="artisan-trade">Maçon & Carreleur certifié</div>
+                  <div class="artisan-chips">
+                    <div class="chip chip-grn" style="background:rgba(22,163,74,0.2);color:#4ade80;">● Disponible</div>
+                    <div class="chip" style="background:rgba(245,158,11,0.2);color:var(--amber);">✓ Vérifié</div>
+                    <div class="chip" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);">🏆 Top</div>
+                  </div>
+                </div>
+                <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:7px 10px;font-size:10px;color:rgba(255,255,255,0.6);cursor:pointer;">↗ Partager</div>
+              </div>
+              <div class="a-stats">
+                <div class="astat"><div class="astat-n">127</div><div class="astat-l">Missions</div></div>
+                <div class="astat"><div class="astat-n" style="color:var(--amber);">4.9</div><div class="astat-l">Note ⭐</div></div>
+                <div class="astat"><div class="astat-n">12</div><div class="astat-l">Ans exp.</div></div>
+                <div class="astat"><div class="astat-n" style="color:#4ade80;">98%</div><div class="astat-l">Succès</div></div>
+              </div>
+            </div>
+            <div class="artisan-body">
+              <div class="a-sec">
+                <div class="a-sec-title">🛠️ Compétences</div>
+                <div class="skills-wrap">
+                  <div class="skill">Maçonnerie</div>
+                  <div class="skill">Carrelage</div>
+                  <div class="skill">Enduit lissé</div>
+                  <div class="skill">Fondation</div>
+                  <div class="skill">Ravalement</div>
+                  <div class="skill">Béton armé</div>
+                </div>
+              </div>
+              <div class="a-sec">
+                <div class="a-sec-title">ℹ️ Informations</div>
+                <div class="info-cards">
+                  <div class="icard"><div class="icard-ico">📍</div><div class="icard-txt">Parcelles Assainies, Dakar</div></div>
+                  <div class="icard"><div class="icard-ico">⏰</div><div class="icard-txt">Lundi — Samedi · 8h–18h</div></div>
+                  <div class="icard"><div class="icard-ico">💰</div><div class="icard-txt">Dès 8 000 FCFA / jour</div><div class="icard-tag"><div class="chip chip-sun">Devis gratuit</div></div></div>
+                  <div class="icard"><div class="icard-ico">🌍</div><div class="icard-txt">Wolof · Français · Pulaar</div></div>
+                </div>
+              </div>
+              <div class="a-sec">
+                <div class="a-sec-title">💬 Avis clients <span style="font-size:10px;color:var(--text3);font-weight:400;">(47 avis)</span></div>
+                <div class="reviews">
+                  <div class="rev">
+                    <div class="rev-hd">
+                      <div class="rev-av" style="background:linear-gradient(135deg,#E11D48,#F43F5E);">A</div>
+                      <div><div class="rev-nm">Aminata Sow</div><div class="rev-stars">⭐⭐⭐⭐⭐</div></div>
+                      <div class="rev-date">Il y a 3j</div>
+                    </div>
+                    <div class="rev-txt">Travail très propre et rapide. Carrelage parfait, je recommande vivement !</div>
+                  </div>
+                  <div class="rev">
+                    <div class="rev-hd">
+                      <div class="rev-av" style="background:linear-gradient(135deg,#0284C7,#38BDF8);">O</div>
+                      <div><div class="rev-nm">Omar Diop</div><div class="rev-stars">⭐⭐⭐⭐</div></div>
+                      <div class="rev-date">Il y a 1 sem</div>
+                    </div>
+                    <div class="rev-txt">Ponctuel et sérieux, résultat conforme au devis. Reviendrai pour d'autres travaux.</div>
+                  </div>
+                </div>
+              </div>
+              <div style="height:12px;"></div>
+            </div>
+            <div class="book-footer">
+              <button class="btn-sun" style="border-radius:14px;padding:13px;font-size:13px;">📅 Réserver Mamadou Ba</button>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Profil Artisan</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       SECTION 4 — PROFIL CLIENT
+  ========================================= -->
+  <div class="sec-wrap" id="s4">
+    <div class="sec-eyebrow">Écran 06</div>
+    <div class="sec-title">Profil <span>Client</span></div>
+    <div class="phones-row">
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="status-bar" style="background:var(--night);color:rgba(255,255,255,0.6);">
+              <div class="status-time">11:05</div><div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="client-header">
+              <div class="client-cover"></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;position:relative;z-index:1;">
+                <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white;">Mon Profil</div>
+                <div style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:9px;padding:6px 10px;font-size:10px;color:rgba(255,255,255,0.7);cursor:pointer;">✏️ Modifier</div>
+              </div>
+              <div class="client-av-wrap">
+                <div class="client-av">👤</div>
+              </div>
+              <div class="client-name">Moussa Diallo</div>
+              <div class="client-since">Membre depuis mars 2024</div>
+              <div class="client-chips">
+                <div class="chip chip-grn">✓ Vérifié</div>
+                <div class="chip chip-sun">🥇 Client fidèle</div>
+              </div>
+            </div>
+            <div class="client-body">
+              <!-- KPIs -->
+              <div class="c-kpi" style="margin-top:12px;">
+                <div class="c-kpi-card"><div class="c-kpi-n">14</div><div class="c-kpi-l">Missions</div></div>
+                <div class="c-kpi-card"><div class="c-kpi-n">4.8</div><div class="c-kpi-l">Note donnée</div></div>
+                <div class="c-kpi-card"><div class="c-kpi-n">87k</div><div class="c-kpi-l">FCFA dépensés</div></div>
+              </div>
+              <!-- Missions récentes -->
+              <div class="row-hd" style="margin-bottom:10px;"><div class="row-title">Missions récentes</div><div class="row-more">Tout voir</div></div>
+              <div class="missions-list" style="margin-bottom:14px;">
+                <div class="mcard">
+                  <div class="mcard-ico">🔧</div>
+                  <div class="mcard-info">
+                    <div class="mcard-title">Fuite cuisine</div>
+                    <div class="mcard-sub">Ibrahima Ndiaye · Plombier</div>
+                  </div>
+                  <div class="mcard-side">
+                    <div class="chip chip-grn" style="font-size:9px;">Terminée</div>
+                    <div class="mcard-date">15 déc.</div>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mcard-ico">🧱</div>
+                  <div class="mcard-info">
+                    <div class="mcard-title">Rénovation murs</div>
+                    <div class="mcard-sub">Mamadou Ba · Maçon</div>
+                  </div>
+                  <div class="mcard-side">
+                    <div class="chip chip-sun" style="font-size:9px;">En cours</div>
+                    <div class="mcard-date">28 déc.</div>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mcard-ico">⚡</div>
+                  <div class="mcard-info">
+                    <div class="mcard-title">Installation prises</div>
+                    <div class="mcard-sub">Abdou Sarr · Électricien</div>
+                  </div>
+                  <div class="mcard-side">
+                    <div class="chip chip-grn" style="font-size:9px;">Terminée</div>
+                    <div class="mcard-date">5 nov.</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Artisans favoris -->
+              <div class="row-hd" style="margin-bottom:10px;"><div class="row-title">❤️ Artisans favoris</div></div>
+              <div class="fav-row" style="margin-bottom:14px;">
+                <div class="fav-chip">
+                  <div class="fav-em">🔧</div>
+                  <div class="fav-nm">Ibrahima</div>
+                  <div class="fav-rt">⭐ 4.9</div>
+                </div>
+                <div class="fav-chip">
+                  <div class="fav-em">🧱</div>
+                  <div class="fav-nm">Mamadou</div>
+                  <div class="fav-rt">⭐ 5.0</div>
+                </div>
+                <div class="fav-chip">
+                  <div class="fav-em">🎨</div>
+                  <div class="fav-nm">Fatou D.</div>
+                  <div class="fav-rt">⭐ 4.8</div>
+                </div>
+                <div class="fav-chip" style="border-style:dashed;cursor:pointer;">
+                  <div class="fav-em" style="opacity:0.3;">+</div>
+                  <div class="fav-nm" style="color:var(--text3);">Ajouter</div>
+                </div>
+              </div>
+              <!-- Paiements -->
+              <div class="row-hd" style="margin-bottom:10px;"><div class="row-title">💳 Moyens de paiement</div><div class="row-more">Gérer</div></div>
+              <div class="pay-methods-grid" style="margin-bottom:14px;">
+                <div class="pay-method def">
+                  <div class="pay-em">🟠</div>
+                  <div class="pay-name">Orange Money</div>
+                  <div class="pay-nb">+221 77 ···</div>
+                  <div class="pay-def">Par défaut</div>
+                </div>
+                <div class="pay-method">
+                  <div class="pay-em">🔵</div>
+                  <div class="pay-name">Wave</div>
+                  <div class="pay-nb">+221 76 ···</div>
+                </div>
+                <div class="pay-method" style="border-style:dashed;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                  <div style="font-size:22px;opacity:0.3;margin-bottom:4px;">+</div>
+                  <div style="font-size:10px;color:var(--text3);">Ajouter</div>
+                </div>
+              </div>
+              <!-- Paramètres -->
+              <div class="row-hd" style="margin-bottom:10px;"><div class="row-title">⚙️ Paramètres</div></div>
+              <div class="settings-list" style="margin-bottom:16px;">
+                <div class="srow"><div class="srow-ico">🔔</div><div class="srow-txt">Notifications</div><div class="srow-arr">›</div></div>
+                <div class="srow"><div class="srow-ico">🔒</div><div class="srow-txt">Sécurité & Confidentialité</div><div class="srow-arr">›</div></div>
+                <div class="srow"><div class="srow-ico">🌍</div><div class="srow-txt">Langue : Français</div><div class="srow-arr">›</div></div>
+                <div class="srow" style="border-color:var(--red-lt);"><div class="srow-ico">🚪</div><div class="srow-txt" style="color:var(--red);">Se déconnecter</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Profil Client</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================
+       SECTION 5 — SUIVI MISSION + PAIEMENT
+  ========================================= -->
+  <div class="sec-wrap" id="s5">
+    <div class="sec-eyebrow">Écrans 07 · 08</div>
+    <div class="sec-title">Suivi de Mission & <span>Paiement</span></div>
+    <div class="phones-row">
+
+      <!-- SUIVI -->
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="status-bar" style="background:var(--sand2);">
+              <div class="status-time">14:12</div><div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="mission-head">
+              <div class="mission-head-row">
+                <div>
+                  <div class="mission-ht">Suivi de mission</div>
+                  <div class="mission-id">#MSN-2024-0847 · 28 déc. 2024</div>
+                </div>
+                <div class="status-pill">⏳ En cours</div>
+              </div>
+            </div>
+            <div class="scr" style="background:var(--white);">
+              <div class="track-wrap">
+                <div class="row-hd" style="margin-bottom:14px;"><div class="row-title">Progression</div></div>
+                <div class="tline">
+                  <div class="titem">
+                    <div class="t-vis"><div class="tdot done">✓</div><div class="tconn done"></div></div>
+                    <div class="tcont"><div class="t-title">Demande envoyée</div><div class="t-time">09:14</div></div>
+                  </div>
+                  <div class="titem">
+                    <div class="t-vis"><div class="tdot done">✓</div><div class="tconn done"></div></div>
+                    <div class="tcont"><div class="t-title">Acceptée par Mamadou Ba</div><div class="t-time">09:22 · +8 min</div></div>
+                  </div>
+                  <div class="titem">
+                    <div class="t-vis"><div class="tdot now">▶</div><div class="tconn pend"></div></div>
+                    <div class="tcont">
+                      <div class="t-title">Mission en cours</div>
+                      <div class="t-desc">Mamadou est sur le chantier</div>
+                      <div class="t-time">Maintenant · Fin estimée 17h00</div>
+                    </div>
+                  </div>
+                  <div class="titem">
+                    <div class="t-vis"><div class="tdot pend">4</div><div class="tconn pend"></div></div>
+                    <div class="tcont"><div class="t-title">Validation client</div><div class="t-desc">Confirmer la fin des travaux</div></div>
+                  </div>
+                  <div class="titem">
+                    <div class="t-vis"><div class="tdot pend">5</div></div>
+                    <div class="tcont"><div class="t-title">Paiement & Avis</div></div>
+                  </div>
+                </div>
+              </div>
+              <!-- Worker mini card -->
+              <div class="w-mini">
+                <div class="w-mini-card">
+                  <div class="wav" style="background:linear-gradient(135deg,#16A34A,#22C55E);width:44px;height:44px;border-radius:14px;font-size:20px;">🧱</div>
+                  <div style="flex:1;">
+                    <div class="wname">Mamadou Ba</div>
+                    <div class="wmeta">Maçon · ⭐ 4.9</div>
+                  </div>
+                  <div class="action-btns">
+                    <button class="act-btn" style="background:var(--green-lt);">📞</button>
+                    <button class="act-btn" style="background:var(--sand);">💬</button>
+                  </div>
+                </div>
+              </div>
+              <!-- Récap paiement -->
+              <div class="pay-recap">
+                <div class="row-hd" style="margin-bottom:12px;"><div class="row-title">Récapitulatif</div></div>
+                <div class="pr"><span class="pr-lbl">Prestation</span><span class="pr-val">Travaux maçonnerie</span></div>
+                <div class="pr"><span class="pr-lbl">Durée</span><span class="pr-val">1 journée</span></div>
+                <div class="pr"><span class="pr-lbl">Tarif artisan</span><span class="pr-val">8 000 FCFA</span></div>
+                <div class="pr"><span class="pr-lbl">Frais de service (5%)</span><span class="pr-val">400 FCFA</span></div>
+                <hr class="pr-divider">
+                <div class="pr-total"><span class="pr-total-lbl">Total à payer</span><span class="pr-total-val">8 400 FCFA</span></div>
+                <div class="row-hd" style="margin-top:14px;margin-bottom:8px;"><div class="row-title" style="font-size:12px;">Payer via</div></div>
+                <div class="mobile-pays">
+                  <div class="mpay sel">🟠 Orange</div>
+                  <div class="mpay">🔵 Wave</div>
+                  <div class="mpay">🟢 Free</div>
+                </div>
+              </div>
+              <div style="padding:12px 14px;">
+                <button class="btn-sun" style="border-radius:14px;padding:13px;font-size:13px;opacity:0.45;box-shadow:none;">Disponible après validation ✓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Suivi de Mission</div>
+      </div>
+
+      <!-- ARTISAN DASHBOARD -->
+      <div class="phone-group">
+        <div class="phone">
+          <div class="phone-notch"><div class="notch-cam"></div><div class="notch-sensor"></div></div>
+          <div class="phone-inner">
+            <div class="status-bar" style="background:var(--night);color:rgba(255,255,255,0.6);">
+              <div class="status-time">14:12</div><div class="status-icons">📶 🔋</div>
+            </div>
+            <div class="scr">
+              <!-- Artisan Home -->
+              <div style="background:var(--night);background-image:radial-gradient(ellipse 180% 80% at 80% 0%,rgba(249,115,22,0.35) 0%,transparent 55%);padding:28px 16px 20px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;">
+                  <div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:4px;">Tableau de bord artisan</div>
+                    <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:white;">Mamadou Ba</div>
+                    <div style="display:flex;align-items:center;gap:5px;margin-top:4px;">
+                      <div style="width:8px;height:8px;background:var(--green);border-radius:50%;box-shadow:0 0 6px rgba(22,163,74,0.5);"></div>
+                      <div style="font-size:11px;color:#4ade80;font-weight:600;">En ligne · Disponible</div>
+                    </div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:8px 12px;text-align:center;">
+                    <div style="font-size:10px;color:rgba(255,255,255,0.4);">Ce mois</div>
+                    <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--amber);">47 500</div>
+                    <div style="font-size:9px;color:rgba(255,255,255,0.35);">FCFA gagnés</div>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+                  <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;text-align:center;">
+                    <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white;">8</div>
+                    <div style="font-size:9px;color:rgba(255,255,255,0.35);margin-top:2px;">Missions</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:10px;text-align:center;">
+                    <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--amber);">4.9</div>
+                    <div style="font-size:9px;color:rgba(255,255,255,0.35);margin-top:2px;">Note moy.</div>
+                  </div>
+                  <div style="background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.3);border-radius:12px;padding:10px;text-align:center;">
+                    <div style="font-size:16px;font-weight:700;color:var(--sun);">2</div>
+                    <div style="font-size:9px;color:rgba(249,115,22,0.7);margin-top:2px;">Nouvelles !</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Requests -->
+              <div style="padding:14px;">
+                <div class="row-hd" style="margin-bottom:12px;">
+                  <div class="row-title">Demandes reçues</div>
+                  <div style="background:var(--red);color:white;font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;">2 nouvelles</div>
+                </div>
+                <!-- Request 1 -->
+                <div style="background:var(--white);border:1.5px solid var(--sun);border-radius:18px;padding:13px;margin-bottom:10px;box-shadow:0 0 0 4px rgba(249,115,22,0.07);">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
+                    <div class="hero-av" style="width:36px;height:36px;background:linear-gradient(135deg,#E11D48,#F43F5E);">A</div>
+                    <div style="flex:1;">
+                      <div class="wname">Aminata Diallo</div>
+                      <div class="wmeta">📍 Plateau · 1.4 km · il y a 5min</div>
+                    </div>
+                    <div class="wprice">10 000 F</div>
+                  </div>
+                  <div style="background:var(--sand2);border-radius:11px;padding:9px 11px;margin-bottom:11px;border-left:3px solid var(--sun);">
+                    <div style="font-size:11px;color:var(--text);font-weight:600;margin-bottom:3px;">"Réparation fuite tuyau — urgent"</div>
+                    <div style="font-size:10px;color:var(--text2);">⏰ Aujourd'hui · dès que possible</div>
+                  </div>
+                  <div style="display:flex;gap:8px;">
+                    <button class="btn-sun" style="flex:1;border-radius:11px;padding:10px;font-size:12px;">✓ Accepter</button>
+                    <button style="flex:1;padding:10px;background:var(--sand2);border:1.5px solid var(--pebble);border-radius:11px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;">✗ Refuser</button>
+                  </div>
+                </div>
+                <!-- Request 2 -->
+                <div style="background:var(--white);border:1.5px solid var(--pebble);border-radius:18px;padding:13px;margin-bottom:10px;">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
+                    <div class="hero-av" style="width:36px;height:36px;background:linear-gradient(135deg,#0284C7,#38BDF8);">M</div>
+                    <div style="flex:1;">
+                      <div class="wname">Modou Fall</div>
+                      <div class="wmeta">📍 Médina · 3.2 km · il y a 18min</div>
+                    </div>
+                    <div class="wprice">25 000 F</div>
+                  </div>
+                  <div style="background:var(--sand2);border-radius:11px;padding:9px 11px;margin-bottom:11px;">
+                    <div style="font-size:11px;color:var(--text);font-weight:600;margin-bottom:3px;">"Muret de clôture 15m — béton"</div>
+                    <div style="font-size:10px;color:var(--text2);">📅 Demain · 8h00</div>
+                  </div>
+                  <div style="display:flex;gap:8px;">
+                    <button class="btn-sun" style="flex:1;border-radius:11px;padding:10px;font-size:12px;">✓ Accepter</button>
+                    <button style="flex:1;padding:10px;background:var(--sand2);border:1.5px solid var(--pebble);border-radius:11px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;">✗ Refuser</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bot-nav">
+              <div class="bn-item act"><div class="bn-pill"></div><div class="bn-icon">🏠</div><div class="bn-lbl">Accueil</div></div>
+              <div class="bn-item"><div class="bn-icon">📋</div><div class="bn-lbl">Missions</div></div>
+              <div class="bn-item"><div class="bn-icon">💬</div><div class="bn-lbl">Messages</div></div>
+              <div class="bn-item"><div class="bn-icon">💰</div><div class="bn-lbl">Revenus</div></div>
+              <div class="bn-item"><div class="bn-icon">👤</div><div class="bn-lbl">Profil</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="screen-tag">Dashboard Artisan</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="stage-footer">
+  <div class="sf-text"><strong>Door Warr ou Dann Doley</strong> · Maquette UI/UX v2.0 · Thème Orange/Soleil · Sénégal 🇸🇳</div>
+  <div class="sf-text" style="margin-top:6px;opacity:0.6;">8 écrans · Client · Artisan · Mobile-first · Angular + Spring Boot + Flutter</div>
+</div>
+
+<script>
+function scrollToSec(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const idx = ['s0','s1','s2','s3','s4','s5'].indexOf(id);
+  if (idx !== -1) document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+}
+// Update active tab on scroll
+const sections = ['s0','s1','s2','s3','s4','s5'];
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = sections.indexOf(e.target.id);
+      if (idx !== -1) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+      }
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => { const el = document.getElementById(s); if(el) observer.observe(el); });
+</script>
+</body>
+</html>
